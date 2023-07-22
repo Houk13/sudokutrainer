@@ -1,24 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react'
+import "./App.css"
+import Sidebar from './Components/Sidebar';
+import PuzzleArea from './Components/PuzzleArea/PuzzleArea';
+import { preventRightMouseMenu } from './helperFunctions';
+
+import testCell from './Sandbox';
+import MenuButton from './Components/MenuButton';
+import { sudoku } from './puzzleLogic/Sudoku/Sudoku';
+
+let globalData = {
+  refresh: 0
+}
+
+const testRow = new Array(9).fill("");
+const testSudoku = sudoku;
+//  [testRow, testRow, testRow, testRow, testRow, testRow, testRow, testRow, testRow];
 
 function App() {
+  useEffect(preventRightMouseMenu, []);
+  let [data, changeData] = useState(globalData);
+  function updateData(){
+    changeData({refresh: ++data.refresh});
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <MenuButton buttonText='test sandbox function' clickhandler={testCell} classString='sandbox'></MenuButton>
+      <Sidebar update={updateData}/>
+      <PuzzleArea puzzleType="sudoku" puzzle={testSudoku.grid}/>
     </div>
   );
 }

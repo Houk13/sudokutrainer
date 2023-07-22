@@ -1,0 +1,68 @@
+:root{
+    --cellSize: 100px;
+    --value-font-size: 50px;
+    --borderWidth: 4px;
+    --ThickBorderColor: black;
+    --ThinBorderColor: rgb(170, 170, 170);
+    --EmptyCellColor: whitesmoke;
+    --PuzzleBackgroundColor: rgb(243, 222, 196);
+}
+
+.PuzzleArea{
+    background-color: var(--PuzzleBackgroundColor);
+    box-sizing: border-box;
+}
+
+/* prevent "selection" outline while in focus */
+.PuzzleArea:focus{
+    /* background-color: rgb(119, 80, 32); */
+    outline: none;
+}
+
+.puzzle{
+    /* height: 50vh; */
+    /* aspect-ratio: 1; */
+    margin: 20px;
+}
+
+.sudokuGrid{
+    display: grid;
+    grid-template-rows: repeat(9, var(--borderWidth) var(--cellSize)) var(--borderWidth);
+    grid-template-columns: repeat(9, var(--borderWidth) var(--cellSize)) var(--borderWidth);
+}
+
+.cell{
+    height: var(--cellSize);
+    font-size: var(--value-font-size);
+    display: absolute;
+    box-sizing: border-box;
+    background-color: var(--EmptyCellColor);
+    /* border: 2px solid black; */
+    aspect-ratio: 1;
+    text-align: center;
+}
+
+.border{
+    /* border: var(--thinBorder) solid black; */
+    z-index: 1;
+}
+
+.verticalBorder{
+    height: var(--cellSize);
+    width: var(--borderWidth);
+}
+.horizontalBorder{
+    height: var(--borderWidth);
+    width: var(--cellSize);
+}
+.intersectBorder{
+    height: var(--borderWidth);
+    width: var(--borderWidth);
+}
+
+.thickBorder{
+    background-color: var(--ThickBorderColor);
+}
+.thinBorder{
+    background-color: var(--ThinBorderColor);
+}
