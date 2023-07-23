@@ -41,17 +41,6 @@ for (const opt of sudokuOptionList){
     sudokuOptions.set(opt, true);
 }
 
-let selection = new Selection([0, 0]);
-console.log(selection.items);
-selection.flip([1, 2]);
-console.log(selection.items);
-selection.flip([1, 2]);
-console.log(selection.items);
-selection.flip([1, 2]);
-console.log(selection.items);
-selection.flip([1, 2]);
-console.log(selection.items);
-selection.flip([1, 2]);
 
 export default function testCell(){
     console.log(sudoku.isSolved());

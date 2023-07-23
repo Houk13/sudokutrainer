@@ -10,12 +10,13 @@ interface CellProps<Type>{
 }
 
 function Cell<Type>(props: CellProps<Type>) {
-    let [isSelected, setSelected] = useState(!(props.isSelected === undefined))
+    let [isSelected, setSelected] = useState(props.isSelected ?? false)
     let defaultHandler = (e: any) => {
         e.preventDefault(); console.log([props.coords[0] + 1, props.coords[1] + 1])
         setSelected(!isSelected);
     }
-    let clickhandler = (typeof props.clickHandler !== "undefined") ? props.clickHandler : defaultHandler;
+    let clickhandler = props.clickHandler ?? props.clickHandler;
+
         
     const selectString = isSelected? "selected" : "";
     // const classString = "cell " + props.bordertype[0] + " " + props.bordertype[1]

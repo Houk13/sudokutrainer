@@ -7,28 +7,32 @@ import { preventRightMouseMenu } from './helperFunctions';
 import testCell from './Sandbox';
 import MenuButton from './Components/MenuButton';
 import { sudoku } from './puzzleLogic/Sudoku/Sudoku';
+import Selection from './UILogic/Selection';
 
-let globalData = {
-  refresh: 0
-}
+let globalData = {refresh: 0};
+let selectionRefresh = {refresh: 0};
 
 const testRow = new Array(9).fill("");
 const testSudoku = sudoku;
+const selection = new Selection();
 //  [testRow, testRow, testRow, testRow, testRow, testRow, testRow, testRow, testRow];
 
 function App() {
   useEffect(preventRightMouseMenu, []);
   let [data, changeData] = useState(globalData);
-  function updateData(){
-    changeData({refresh: ++data.refresh});
+  let [newSelection, updateSelection] = useState(selectionRefresh);
+  function update(fun: any, data: any){
+    return () => fun({refresh: ++data.refresh});
   }
 
   return (
     <div className="App">
       <MenuButton buttonText='test sandbox function' clickhandler={testCell} classString='sandbox'></MenuButton>
-      <Sidebar update={updateData}/>
-      <PuzzleArea puzzleType="sudoku" puzzle={testSudoku.grid}/>
+      <Sidebar update={update(changeData, data)}/>
+      <PuzzleArea update={update(updateSelection, newSelection)} puzzleType="sudoku" puzzle={testSudoku.grid} selected={selection}/>
+      <p>{newSelection.refresh}: {selection.get([0,0])}</p>
     </div>
+    
   );
 }
 
