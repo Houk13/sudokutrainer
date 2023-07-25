@@ -6,7 +6,7 @@ import { preventRightMouseMenu } from './helperFunctions';
 
 import testCell from './Sandbox';
 import MenuButton from './Components/MenuButton';
-import { sudoku } from './puzzleLogic/Sudoku/Sudoku';
+import { sudoku } from './puzzleLogic/Sudoku/TestSudoku';
 import Selection from './UILogic/Selection';
 
 let globalData = {refresh: 0};
