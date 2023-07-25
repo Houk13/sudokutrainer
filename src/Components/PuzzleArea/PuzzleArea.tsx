@@ -1,11 +1,14 @@
-import React from 'react'
 import './Puzzle.css'
 import Cell from './Cell';
 import SudokuBorder from './SudokuBorder';
+import Selection from '../../UILogic/Selection';
 
 interface PuzzleAreaprops<Type>{
-    puzzleType: string;
-    puzzle: Type[][];
+  update: () => void;  
+  puzzleType: string;
+  puzzle: Type[][];
+  selected: Selection;
+    
 }
 
 const borderTBTypes = ["top", "mid", "bottom"] as const;
@@ -17,7 +20,14 @@ function PuzzleArea<Type>(props: PuzzleAreaprops<Type>) {
             key={"Cell" + String(row) + String(col)} 
             bordertype={[borderTBTypes[row % 3], borderLRTypes[col % 3]]} 
             coords={[row, col]}
-            content={value}></Cell>
+            content={value}
+            clickHandler={(e) => {
+              props.selected.flip([row, col]);
+              console.log(props.selected);
+              props.update();
+            }}
+            isSelected={props.selected.get([row, col])}></Cell>
+            
   }
   function renderBorder(row: number, col: number, bordershape: string) {
     return <SudokuBorder key={bordershape + String(row) + String(col)} row={row} col={col} borderShape={bordershape}></SudokuBorder>

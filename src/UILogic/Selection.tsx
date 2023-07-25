@@ -1,35 +1,69 @@
 type coordinate = [number, number];
 
 export default class Selection {
-    items: coordinate[]
+    items: Map<string, boolean>
 
-    constructor(cel?: coordinate){
-        if (cel) {
-            this.items = [cel];
-        } else {
-            this.items = [];
-        }
+    constructor(){
+        this.items = new Map();
     }
 
     clear(): void {
-        this.items = [];
+        this.items.clear();
     }
+    private toString(coord: coordinate) {return coord[0] + ":" + coord[1]}
 
     private add(cel: coordinate): void {
-        this.items.push(cel);
+        this.items.set(this.toString(cel), true);
     }
 
-    remove(celIdx: number): void {
-        this.items.splice(celIdx, 1);
+    private remove(cel: coordinate): void {
+        this.items.delete(this.toString(cel));
     }
 
     flip(cel: coordinate): void {
-        const idx = this.items.findIndex(val => val[0] === cel[0] && val[1] === cel[1]);
-        if (idx === -1){
+        if (this.items.get(this.toString(cel)) === undefined) {
             this.add(cel);
+            // console.log("added ", cel);
         } else {
-            this.remove(idx);
+            this.remove(cel);
         }
     }
 
+    get(cel: coordinate): boolean {
+        return this.items.get(this.toString(cel)) ?? false;
+    }
 }
+
+// export default class Selection {
+//     items: coordinate[]
+
+//     constructor(cel?: coordinate){
+//         if (cel) {
+//             this.items = [cel];
+//         } else {
+//             this.items = [];
+//         }
+//     }
+
+//     clear(): void {
+//         this.items = [];
+//     }
+
+//     private add(cel: coordinate): void {
+//         this.items.push(cel);
+//     }
+
+//     remove(celIdx: number): void {
+//         this.items.splice(celIdx, 1);
+//     }
+
+//     flip(cel: coordinate): void {
+//         const idx = this.items.findIndex(val => val[0] === cel[0] && val[1] === cel[1]);
+//         if (idx === -1){
+//             this.add(cel);
+//         } else {
+//             this.remove(idx);
+//         }
+//     }
+
+// }
