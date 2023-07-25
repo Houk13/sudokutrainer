@@ -1,3 +1,10 @@
+// This file is for testing code. 
+// It gets executed once on reload, and the default exported function is connected to 
+// the "test sandbox function" button in the site menu
+
+
+
+
 
 // import Cell from "./puzzleLogic/Classes/Cell";
 import Selection from "./UILogic/Selection";

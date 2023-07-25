@@ -1,4 +1,3 @@
-import { boolean } from "mathjs";
 import Puzzle, { celValue } from "../Classes/Puzzle";
 import { isSet1to9 } from "../Scripts/sudokuRules";
 type gridType = Array<celValue<number>[]>
@@ -31,7 +30,7 @@ let getBox = (grid: gridType, boxnum: number): celValue<number>[] => {
 
 let rules: ((grid: gridType) => boolean)[] = [];
 
-for (let set = 0; set != 9; ++set) {
+for (let set = 0; set !== 9; ++set) {
     rules.push((grid: gridType) => isSet1to9(grid[set]));
     rules.push((grid: gridType) => isSet1to9(grid.map(arr => arr[set])));
     rules.push((grid: gridType) => isSet1to9(getBox(grid, set)))
