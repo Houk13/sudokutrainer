@@ -1,5 +1,5 @@
 import Puzzle, { celValue } from "../Classes/Puzzle";
-import { isSet1to9 } from "../Scripts/sudokuRules";
+import { isSet1to9 } from "../Scripts/sudokuHelper";
 type gridType = Array<celValue<number>[]>
 
 // const grid = new Array<celValue<number>[]>(9);

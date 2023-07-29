@@ -12,6 +12,7 @@ import { Options } from "./puzzleLogic/Classes/Options"
 import { isSetNtoM } from "./puzzleLogic/Scripts/helperFunctions";
 import { sudoku } from "./puzzleLogic/Sudoku/TestSudoku";
 import generateQuickSudokuScan from "./puzzleLogic/Sudoku/generateQuickSudokuScan";
+
 // import { isSet1to9 } from "./puzzleLogic/Scripts/sudokuRules";
 
 // let file = fetch("test.txt").then(res => res.text()).then(res => console.log(res));
@@ -33,9 +34,10 @@ import generateQuickSudokuScan from "./puzzleLogic/Sudoku/generateQuickSudokuSca
 //     }
 // }
 
+// console.log(hasRepeatedNumber([1, 9, 2, 4, 5,9, 6]));
 
-let generator = generateQuickSudokuScan();
-console.log(generator());
+// let generator = generateQuickSudokuScan();
+// console.log(generator());
 
 console.log(isSetNtoM([2, 3.2, 4], 4, 2));
 
