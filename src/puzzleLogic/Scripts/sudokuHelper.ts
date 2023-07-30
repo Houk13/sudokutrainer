@@ -63,7 +63,7 @@ export const getValueCount = (arr: celValue[]): number[] => {
     return lib;
 }
 /** returns an array of the values not used yet in the given row (can be empty) */
-export const getDirectRowOptions = (grid: celValue[][], row: number) => {
+export const getDirectRowOptions = (grid: celValue[][], row: number): number[] => {
     const lib = getValueCount(getSudokuRow(grid, row));
     const options = [];
     for (let opt = 1; opt !== 10; opt++) {
@@ -74,7 +74,7 @@ export const getDirectRowOptions = (grid: celValue[][], row: number) => {
     return options;
 }
 /** returns an array of the values not used yet in the given column (can be empty) */
-export const getDirectColOptions = (grid: celValue[][], col: number) => {
+export const getDirectColOptions = (grid: celValue[][], col: number): number[] => {
     const lib = getValueCount(getSudokuCol(grid, col));
     const options = [];
     for (let opt = 1; opt !== 10; opt++) {
@@ -85,7 +85,7 @@ export const getDirectColOptions = (grid: celValue[][], col: number) => {
     return options;
 }
 /** returns an array of the values not used yet in the given box (can be empty) */
-export const getDirectBoxOptions = (grid: celValue[][], box: number) => {
+export const getDirectBoxOptions = (grid: celValue[][], box: number): number[] => {
     const lib = getValueCount(getSudokuRow(grid, box));
     const options = [];
     for (let opt = 1; opt !== 10; opt++) {
@@ -96,7 +96,7 @@ export const getDirectBoxOptions = (grid: celValue[][], box: number) => {
     return options;
 }
 /** checks the row, column and box and returns an array of values that aren't present yet. */
-export const getDirectCelOptions = (grid: celValue[][], row: number, col: number): celValue[] => {
+export const getDirectCelOptions = (grid: celValue[][], row: number, col: number): number[] => {
     const rowOpts = getDirectRowOptions(grid, row);
     const colOpts = getDirectColOptions(grid, col);
     const boxOpts = getDirectBoxOptions(grid, getBoxNum(row, col));
@@ -110,4 +110,37 @@ export const getDirectCelOptions = (grid: celValue[][], row: number, col: number
         if (lib[opt] === 3) celOpts.push(opt);
     }
     return celOpts;
+}
+/** creates a grid where each cel is filled with the values that cannot 
+ * be seen directlyfrom that cell 
+ * INEFFICIENT!!!
+*/
+export const getDirectOptionGrid = (grid: celValue[][]): number[][][] => {
+    const optGrid: number[][][] = new Array(9);
+    for (let rownum: number = 0; rownum !== 9; rownum++){
+        let row = new Array(9);
+        for (let colnum: number = 0; colnum !== 9; colnum++){
+            row[colnum] = getDirectCelOptions(grid, rownum, colnum);
+        }
+        optGrid[rownum] = row;
+    }
+    return optGrid;
+}
+/**  creates a grid like directoptions, but instead of the options for each cell
+ *   it lists the options for each digit in that row. 
+ *      So if rowOpt[row1][4] is [3, 4, 7], that means that in 
+ *      row 1, the number 4 can go in column 3, 4 or 7
+ *  UNIMPLEMENTED
+*/
+export function getRowOptionGrid(grid: celValue[][]): number[][][] {
+    hf.isUnimplemented("getRowOptionGrid");
+    return [[[]]];
+}
+export function getColOptionGrid(grid: celValue[][]): number[][][] {
+    hf.isUnimplemented("getColOptionGrid");
+    return [[[]]];
+}
+export function getBoxOptionGrid(grid: celValue[][]): number[][][] {
+    hf.isUnimplemented("getBoxOptionGrid");
+    return [[[]]];
 }

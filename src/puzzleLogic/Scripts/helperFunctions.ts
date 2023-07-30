@@ -14,3 +14,8 @@ export const isSetNtoM = (set: celValue[], M: number, N:number = 1): boolean => 
 }
 
 
+
+// helpful functions for debugging
+export const isUnimplemented = (funcName?: string): void => {
+    throw(funcName ?? "a function" + " has not been implemented yet");
+}
