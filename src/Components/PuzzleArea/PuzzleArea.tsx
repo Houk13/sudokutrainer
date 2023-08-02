@@ -8,7 +8,7 @@ interface PuzzleAreaprops<Type>{
   puzzleType: string;
   puzzle: Type[][];
   selected: Selection;
-    
+  refresh?: boolean;
 }
 
 const borderTBTypes = ["top", "mid", "bottom"] as const;

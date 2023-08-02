@@ -19,10 +19,11 @@ const selection = new Selection();
 
 function App() {
   useEffect(preventRightMouseMenu, []);
+  const [needsRefresh, refresh] = useState(true);
   let [data, changeData] = useState(globalData);
   let [newSelection, updateSelection] = useState(selectionRefresh);
   function update(fun: any, data: any){
-    return () => fun({refresh: ++data.refresh});
+    return () => refresh(!needsRefresh);
   }
 
   return (
