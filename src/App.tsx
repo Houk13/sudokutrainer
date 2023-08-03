@@ -30,7 +30,6 @@ function App() {
       <MenuButton buttonText='test sandbox function' clickhandler={testCell} classString='sandbox'></MenuButton>
       <Sidebar update={update(changeData, data)}/>
       <PuzzleArea update={update(updateSelection, newSelection)} puzzleType="sudoku" puzzle={testSudoku.grid} selected={selection}/>
-      <p>{newSelection.refresh}: {selection.get([0,0])}</p>
     </div>
     
   );

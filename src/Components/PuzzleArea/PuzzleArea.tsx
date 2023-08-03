@@ -1,71 +1,47 @@
 import './Puzzle.css'
-import Cell from './Cell';
-import SudokuBorder from './SudokuBorder';
 import Selection from '../../UILogic/Selection';
+import SudokuPlayer from './Sudoku/SudokuPlayer';
 
-interface PuzzleAreaprops<Type>{
+interface PuzzleAreaprops<Type extends number | "">{
   update: () => void;  
   puzzleType: string;
   puzzle: Type[][];
   selected: Selection;
-  refresh?: boolean;
 }
 
-const borderTBTypes = ["top", "mid", "bottom"] as const;
-const borderLRTypes = ["left", "center", "right"] as const;
+function PuzzleArea<Type extends number | "">(props: PuzzleAreaprops<Type>) {
+  let puzzle1: JSX.Element = <h1>type of puzzle was not recognized</h1>;
+  if (props.puzzleType === 'sudoku') {
+    puzzle1 = <SudokuPlayer update={props.update} 
+                      puzzleType='Sudoku' 
+                      puzzle={props.puzzle}
+                      selected={props.selected}
+                      keyboardHandler={keyboardHandler}></SudokuPlayer>
+  }
 
-function PuzzleArea<Type>(props: PuzzleAreaprops<Type>) {
-  function renderCell(row: number, col: number, value: Type){
-    return <Cell 
-            key={"Cell" + String(row) + String(col)} 
-            bordertype={[borderTBTypes[row % 3], borderLRTypes[col % 3]]} 
-            coords={[row, col]}
-            content={value}
-            clickHandler={(e) => {
-              props.selected.flip([row, col]);
-              console.log(props.selected);
-              props.update();
-            }}
-            isSelected={props.selected.get([row, col])}></Cell>
-            
-  }
-  function renderBorder(row: number, col: number, bordershape: string) {
-    return <SudokuBorder key={bordershape + String(row) + String(col)} row={row} col={col} borderShape={bordershape}></SudokuBorder>
-  }
-  function renderBorderRow(row: number) {
-    let rowCells: JSX.Element[] = [];
-    for (let col = 0; col !== 9; ++col){
-      rowCells.push(renderBorder(row, col, "intersectBorder"));
-      rowCells.push(renderBorder(row, col, "horizontalBorder"));
+  function keyboardHandler(e: React.KeyboardEvent) {
+    if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 65 && e.keyCode <= 90)){
+      props.selected.items.forEach((val, coord) => {
+        if (val) {
+          const coordstring: string[] = coord.split(':');
+          const coords: number[] = [];
+          coordstring.forEach(str => coords.push(Number(str)));
+          props.puzzle[coords[0]][coords[1]] = e.key as Type;
+        }
+      });
     }
-    rowCells.push(renderBorder(row, 9, "intersectBorder"));
-    return rowCells;
-  }
-  function renderSudokuGrid(){
-    let sudokugrid: JSX.Element[][] = []
-    for (let row = 0; row !== 9; ++row){
-      sudokugrid.push(renderBorderRow(row));
-      let rowCells: JSX.Element[] = [];
-      for (let col = 0; col !== 9; ++col){
-        rowCells.push(renderBorder(row, col, "verticalBorder"));
-        rowCells.push(renderCell(row, col, props.puzzle[row][col]));
-      }
-      rowCells.push(renderBorder(row, 9, "verticalBorder"));
-      sudokugrid.push(rowCells);
-    }
-    sudokugrid.push(renderBorderRow(9));
-    return(<div className='sudokuGrid'>{sudokugrid}</div>)
+    props.update();
   }
 
   const areaID = "PuzzleArea1";
 
   return (
     <div id={areaID} className='PuzzleArea' 
-        onKeyDown={e => console.log(e.key)} 
         tabIndex={-1} 
-        onClick={() => document.getElementById(areaID)?.focus()}>
+        onClick={() => document.getElementById(areaID)?.focus()}
+        onKeyDown={keyboardHandler}>
       <div className='puzzle'>
-        {renderSudokuGrid()}
+        {puzzle1}
       </div>
     </div>
   )
