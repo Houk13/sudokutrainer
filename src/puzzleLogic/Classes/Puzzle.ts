@@ -11,6 +11,11 @@ export default class Puzzle<Type>{
         this.solution = solution;
     }
 
+    setVal(x: number, y: number, val: Type){
+        if (x < 0 || x >= this.grid[0].length || y < 0 || y >= this.grid.length) throw("outside of grid indexes");
+        this.grid[x][y] = val;
+    }
+
     isSolved(): boolean {
         let solved = true;
         this.rules?.forEach(element => {

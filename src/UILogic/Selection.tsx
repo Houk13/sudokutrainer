@@ -2,13 +2,16 @@ type coordinate = [number, number];
 
 export default class Selection {
     items: Map<string, boolean>
+    nSelected: number
 
     constructor(){
         this.items = new Map();
+        this.nSelected = 0;
     }
 
     clear(): void {
         this.items.clear();
+        this.nSelected = 0;
     }
     private toString(coord: coordinate) {return coord[0] + ":" + coord[1]}
 
@@ -23,9 +26,11 @@ export default class Selection {
     flip(cel: coordinate): void {
         if (this.items.get(this.toString(cel)) === undefined) {
             this.add(cel);
+            this.nSelected++;
             // console.log("added ", cel);
         } else {
             this.remove(cel);
+            this.nSelected--;
         }
     }
 
