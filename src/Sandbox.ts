@@ -52,8 +52,9 @@ const testSudoku: celValue[][] =
                     ["", "", "", 1 , "", 5 , "", "", ""]];
 
 // console.log(sh.getSudokuBox(testSudoku, 1))
-console.log(sh.getPositionRowOptions(testSudoku,4));  
+console.log("boxOptions: ", sh.getBoxOptionGrid(testSudoku));
 // console.log(sh.getSudokuRow(testSudoku, 1));
+// console.log(sh.getDirectOptionGrid(testSudoku));
 // console.log(sh.getDirectBoxOptions(testSudoku, 1));
 // console.log(sh.getDirectRowOptions(testSudoku, 1));
 // console.log(sh.getDirectCelOptions(testSudoku, 5, 9))                  

@@ -59,10 +59,10 @@ export const hasRepeatedNumber = (arr: celValue[]): number => {
 }
 /** counts which values are present in the given array, returns an array of length 9 */
 export const getValueCount = (arr: celValue[]): number[] => {
-    const lib = new Array(SUDOKUSIZE + 1).fill(0);
+    const lib = new Array(SUDOKUSIZE).fill(0);
     arr.forEach(val => {
         if (val === "") return;
-        lib[val]++;
+        lib[val - 1]++;
     })
     return lib;
 }
@@ -71,7 +71,7 @@ export const getDirectRowOptions = (grid: celValue[][], row: number): number[] =
     const lib = getValueCount(getSudokuRow(grid, row));
     const options = [];
     for (let opt = 1; opt !== 10; opt++) {
-        if (lib[opt] === 0) {
+        if (lib[opt - 1] === 0) {
             options.push(opt);
         }
     }
@@ -82,7 +82,7 @@ export const getDirectColOptions = (grid: celValue[][], col: number): number[] =
     const lib = getValueCount(getSudokuCol(grid, col));
     const options = [];
     for (let opt = 1; opt !== 10; opt++) {
-        if (lib[opt] === 0) {
+        if (lib[opt - 1] === 0) {
             options.push(opt);
         }
     }
@@ -93,7 +93,7 @@ export const getDirectBoxOptions = (grid: celValue[][], box: number): number[] =
     const lib = getValueCount(getSudokuBox(grid, box));
     const options: number[] = [];
     for (let opt = 1; opt !== 10; opt++) {
-        if (lib[opt] === 0) {
+        if (lib[opt - 1] === 0) {
             options.push(opt);
         }
     }
@@ -133,10 +133,17 @@ export const getDirectOptionGrid = (grid: celValue[][]): number[][][] => {
 }
 
 export const directToPosOptions = (dirOptions: number[][]): number[][] => {
-    const posOptions = new Array(SUDOKUSIZE).fill([]);
-    dirOptions.forEach((cel, idx) => {
+    const posOptions: number[][] = new Array(SUDOKUSIZE);
+
+    dirOptions.forEach((cel: number[], idx: number) => {
+        // console.log(cel);
         for (const opt of cel){
-            posOptions[opt - 1].push(idx + 1);
+            if (posOptions[opt - 1] !== undefined){
+                posOptions[opt - 1].push(idx + 1);
+            } else {
+                posOptions[opt - 1] = [idx + 1];
+            }
+            // console.log(opt - 1, ": ", idx + 1);
         }
     });
     return posOptions;
@@ -147,21 +154,44 @@ export const getPositionRowOptions = (grid: celValue[][], row: number, optionGri
     const directRow = getSudokuRow(optionGrid, row);
     return directToPosOptions(directRow);
 }
+
+export const getPositionColOptions = (grid: celValue[][], col: number, optionGrid?: number[][][]): number[][] => {
+    optionGrid = optionGrid ?? getDirectOptionGrid(grid); // make the direct option grid if not given
+    const directCol = getSudokuCol(optionGrid, col);
+    return directToPosOptions(directCol);
+}
+
+export const getPositionBoxOptions = (grid: celValue[][], box: number, optionGrid?: number[][][]): number[][] => {
+    optionGrid = optionGrid ?? getDirectOptionGrid(grid); // make the direct option grid if not given
+    const directBox = getSudokuBox(optionGrid, box);
+    return directToPosOptions(directBox);
+}
 /**  creates a grid like directoptions, but instead of the options for each cell
  *   it lists the options for each digit in that row. 
- *      So if rowOpt[row1][4] is [3, 4, 7], that means that in 
- *      row 1, the number 4 can go in column 3, 4 or 7
- *  UNIMPLEMENTED
+ *      So if rowOpt[1][4] is [3, 4, 7], that means that in 
+ *      row 2(1 = 2nd index), the number 5(4 = 5th option) can go in column 3, 4 or 7
 */
-export function getRowOptionGrid(grid: celValue[][]): number[][][] {
-    hf.isUnimplemented("getRowOptionGrid");
-    return [[[]]];
+export function getRowOptionGrid(grid: celValue[][], dirOptGrid?: number[][][]): number[][][] {
+    dirOptGrid = dirOptGrid ?? getDirectOptionGrid(grid); // make the direct option grid if not given
+    const newGrid = new Array(SUDOKUSIZE);
+    for (let row = 1; row !== 10; row++) {
+        newGrid[row - 1] = getPositionRowOptions(grid, row, dirOptGrid);
+    }
+    return newGrid
 }
-export function getColOptionGrid(grid: celValue[][]): number[][][] {
-    hf.isUnimplemented("getColOptionGrid");
-    return [[[]]];
+export function getColOptionGrid(grid: celValue[][], dirOptGrid?: number[][][]): number[][][] {
+    dirOptGrid = dirOptGrid ?? getDirectOptionGrid(grid); // make the direct option grid if not given
+    const newGrid = new Array(SUDOKUSIZE);
+    for (let col = 1; col !== 10; col++) {
+        newGrid[col - 1] = getPositionColOptions(grid, col, dirOptGrid);
+    }
+    return newGrid
 }
-export function getBoxOptionGrid(grid: celValue[][]): number[][][] {
-    hf.isUnimplemented("getBoxOptionGrid");
-    return [[[]]];
+export function getBoxOptionGrid(grid: celValue[][], dirOptGrid?: number[][][]): number[][][] {
+    dirOptGrid = dirOptGrid ?? getDirectOptionGrid(grid); // make the direct option grid if not given
+    const newGrid = new Array(SUDOKUSIZE);
+    for (let box = 1; box !== 10; box++) {
+        newGrid[box - 1] = getPositionBoxOptions(grid, box, dirOptGrid);
+    }
+    return newGrid
 }
