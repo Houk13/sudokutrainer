@@ -171,7 +171,7 @@ export const getPositionBoxOptions = (grid: celValue[][], box: number, optionGri
  *      So if rowOpt[1][4] is [3, 4, 7], that means that in 
  *      row 2(1 = 2nd index), the number 5(4 = 5th option) can go in column 3, 4 or 7
 */
-export function getRowOptionGrid(grid: celValue[][], dirOptGrid?: number[][][]): number[][][] {
+export function getPositionRowOptionGrid(grid: celValue[][], dirOptGrid?: number[][][]): number[][][] {
     dirOptGrid = dirOptGrid ?? getDirectOptionGrid(grid); // make the direct option grid if not given
     const newGrid = new Array(SUDOKUSIZE);
     for (let row = 1; row !== 10; row++) {
@@ -179,7 +179,7 @@ export function getRowOptionGrid(grid: celValue[][], dirOptGrid?: number[][][]):
     }
     return newGrid
 }
-export function getColOptionGrid(grid: celValue[][], dirOptGrid?: number[][][]): number[][][] {
+export function getPositionColOptionGrid(grid: celValue[][], dirOptGrid?: number[][][]): number[][][] {
     dirOptGrid = dirOptGrid ?? getDirectOptionGrid(grid); // make the direct option grid if not given
     const newGrid = new Array(SUDOKUSIZE);
     for (let col = 1; col !== 10; col++) {
@@ -187,7 +187,7 @@ export function getColOptionGrid(grid: celValue[][], dirOptGrid?: number[][][]):
     }
     return newGrid
 }
-export function getBoxOptionGrid(grid: celValue[][], dirOptGrid?: number[][][]): number[][][] {
+export function getPositionBoxOptionGrid(grid: celValue[][], dirOptGrid?: number[][][]): number[][][] {
     dirOptGrid = dirOptGrid ?? getDirectOptionGrid(grid); // make the direct option grid if not given
     const newGrid = new Array(SUDOKUSIZE);
     for (let box = 1; box !== 10; box++) {

@@ -9,7 +9,6 @@ interface SudokuPlayerprops{
   puzzleType: string;
   puzzle: celValue<number>[][];
   selected: Selection;
-  keyboardHandler: (e: React.KeyboardEvent) => void;
 }
 
 function SudokuPlayer(props: SudokuPlayerprops) {
@@ -20,7 +19,7 @@ function SudokuPlayer(props: SudokuPlayerprops) {
         props.selected.flip([row, col])
       }
       else {
-        let wasOn = props.selected.get([row, col]) && props.selected.nSelected < 2;
+        let wasOn = props.selected.isSelected([row, col]) && props.selected.nSelected < 2;
         props.selected.clear();
         if (!wasOn) props.selected.flip([row, col]);
       }
@@ -32,7 +31,7 @@ function SudokuPlayer(props: SudokuPlayerprops) {
             coords={[row, col]}
             content={value}
             clickHandler={mouseDownHandler}
-            isSelected={props.selected.get([row, col])}></Cell>
+            isSelected={props.selected.isSelected([row, col])}></Cell>
             
   }
   function renderBorder(row: number, col: number, bordershape: string) {

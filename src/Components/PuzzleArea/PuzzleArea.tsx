@@ -1,48 +1,82 @@
 import './Puzzle.css'
 import Selection from '../../UILogic/Selection';
 import SudokuPlayer from './Sudoku/SudokuPlayer';
+import { isAlphaNumeric, isNumeric } from './inputHandlers';
+import QuickScanSudokuPlayer from './Sudoku/QuickScanSudokuPlayer';
+import { QuickSudokuScan } from '../../puzzleLogic/Sudoku/generateQuickSudokuScan';
+import { randomInt } from 'mathjs';
+import { useState } from 'react';
 
 interface PuzzleAreaprops<Type extends number | "">{
   update: () => void;  
+  data: any;
   puzzleType: string;
-  puzzle: Type[][];
   selected: Selection;
+  puzzle?: Type[][];
+  quickScanSudoku?: QuickSudokuScan;
+  quickScanGenerater?: () => void;
+  scores?: any;
+  settings?: any;
+  userInfo?: any;
 }
 
 function PuzzleArea<Type extends number | "">(props: PuzzleAreaprops<Type>) {
   let puzzle1: JSX.Element = <h1>type of puzzle was not recognized</h1>;
-  if (props.puzzleType === 'sudoku') {
+  let keyboardHandler = (e: React.KeyboardEvent) => console.log(e.key);
+  let [quickResult, setQuickResult] = useState("none");
+  if (props.puzzleType === 'sudoku' && props.puzzle !== undefined) {
+    keyboardHandler = (e: React.KeyboardEvent) => {
+      // if input is alphanumeric, treat is as puzzleEntry
+      if (isAlphaNumeric(e.key)){
+        props.selected.items.forEach((val, coord) => {
+          if (val) {
+            const coordstring: string[] = coord.split(':');
+            const coords: number[] = [];
+            coordstring.forEach(str => coords.push(Number(str)));
+            props.puzzle![coords[0]][coords[1]] = e.key as Type;
+          }
+        });
+      }
+      props.update();
+    }
     puzzle1 = <SudokuPlayer update={props.update} 
                       puzzleType='Sudoku' 
-                      puzzle={props.puzzle}
-                      selected={props.selected}
-                      keyboardHandler={keyboardHandler}></SudokuPlayer>
+                      puzzle={props.puzzle as Type[][]}
+                      selected={props.selected}></SudokuPlayer>
+  } else if (props.puzzleType === 'quickScanSudoku' && props.quickScanSudoku !== undefined) {
+    keyboardHandler = (e: React.KeyboardEvent) => {
+      // if input is alphanumeric, treat is as puzzleEntry
+      if (isNumeric(e.key)){
+        const result = Number(e.key) === props.quickScanSudoku?.answer;
+        console.log(result);
+        if (result) {
+          setQuickResult("correct");
+        } else {
+          setQuickResult("wrong");
+        }
+        props.quickScanGenerater!();
+      }
+      props.update();
+    }
+    let type = props.data.type;
+    if (type === "any") type = ["row", "col", "box"][randomInt(0, 3)] as "row"| "col" | "box"
+    puzzle1 = <QuickScanSudokuPlayer update={props.update}
+                      puzzleType='quickScanSudoku'
+                      puzzle={props.quickScanSudoku}
+                      type={type}
+                      ></QuickScanSudokuPlayer>
   }
 
-  function keyboardHandler(e: React.KeyboardEvent) {
-    if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 65 && e.keyCode <= 90)){
-      props.selected.items.forEach((val, coord) => {
-        if (val) {
-          const coordstring: string[] = coord.split(':');
-          const coords: number[] = [];
-          coordstring.forEach(str => coords.push(Number(str)));
-          props.puzzle[coords[0]][coords[1]] = e.key as Type;
-        }
-      });
-    }
-    props.update();
-  }
+  
 
   const areaID = "PuzzleArea1";
 
   return (
-    <div id={areaID} className='PuzzleArea' 
+    <div id={areaID} className={'PuzzleArea ' + quickResult} 
         tabIndex={-1} 
         onClick={() => document.getElementById(areaID)?.focus()}
         onKeyDown={keyboardHandler}>
-      <div className='puzzle'>
         {puzzle1}
-      </div>
     </div>
   )
 }

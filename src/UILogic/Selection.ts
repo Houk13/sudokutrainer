@@ -1,8 +1,9 @@
 type coordinate = [number, number];
 
 export default class Selection {
-    items: Map<string, boolean>
+    items: Map<string, coordinate>
     nSelected: number
+    latest: coordinate | undefined
 
     constructor(){
         this.items = new Map();
@@ -12,15 +13,28 @@ export default class Selection {
     clear(): void {
         this.items.clear();
         this.nSelected = 0;
+        this.latest = undefined;
     }
+    softClear(): void {
+        this.items.clear();
+        this.nSelected = 0;
+        if (this.latest !== undefined) this.add(this.latest);
+    }
+
     private toString(coord: coordinate) {return coord[0] + ":" + coord[1]}
+    private fromString(str: string) {
+        const strArr = str.split(':');
+        return [Number(strArr[0]), Number(strArr[1])];
+    }
 
     private add(cel: coordinate): void {
-        this.items.set(this.toString(cel), true);
+        this.items.set(this.toString(cel), cel);
+        this.latest = cel;
     }
 
     private remove(cel: coordinate): void {
         this.items.delete(this.toString(cel));
+        this.items.forEach(cel => this.latest = cel);
     }
 
     flip(cel: coordinate): void {
@@ -32,10 +46,15 @@ export default class Selection {
             this.remove(cel);
             this.nSelected--;
         }
+        console.log(this.latest);
     }
 
-    get(cel: coordinate): boolean {
-        return this.items.get(this.toString(cel)) ?? false;
+    isSelected(cel: coordinate): boolean {
+        return (this.items.get(this.toString(cel)) !== undefined) ? true : false;
+    }
+
+    actOnSelected(fun: (cel: coordinate) => any) {
+        this.items.forEach(val => fun(val));
     }
 }
 

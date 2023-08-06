@@ -1,5 +1,5 @@
 export type celValue<Type> = (Type | "");
-
+/** deprecated, use BasicPuzzle and PuzzleInterface if possible */
 export default class Puzzle<Type>{
     grid: celValue<Type>[][];
     rules?: ((grid: celValue<Type>[][]) => boolean)[];
