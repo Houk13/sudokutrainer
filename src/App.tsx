@@ -9,6 +9,7 @@ import MenuButton from './Components/MenuButton';
 import { sudoku } from './puzzleLogic/Sudoku/TestSudoku';
 import Selection from './UILogic/Selection';
 import quickScanSudokuGenerator from './puzzleLogic/Sudoku/generateQuickSudokuScan';
+import Puzzle from './puzzleLogic/Classes/Puzzle';
 
 let globalData = {refresh: 0, type: "any"};
 let selectionRefresh = {refresh: 0};
@@ -34,7 +35,7 @@ function App() {
       {/* <MenuButton buttonText='test sandbox function' clickhandler={testCell} classString='sandbox'></MenuButton> */}
       <Sidebar data={data} update={update(changeData, data)}/>
       {/* <PuzzleArea update={update(updateSelection, newSelection)} puzzleType="sudoku" puzzle={testSudoku.grid} selected={selection}/> */}
-      <PuzzleArea update={update(updateSelection, newSelection)} data={data} puzzleType="quickScanSudoku" quickScanSudoku={quickScan} quickScanGenerater={generateQuickScan} selected={selection}/>
+      <PuzzleArea update={update(updateSelection, newSelection)} data={data} puzzleType="quickScanSudoku" puzzle={testSudoku} quickScanSudoku={quickScan} quickScanGenerater={generateQuickScan} selected={selection}/>
     </div>
     
   );

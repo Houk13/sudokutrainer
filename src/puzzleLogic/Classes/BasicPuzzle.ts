@@ -1,8 +1,6 @@
 type celValue<Type> = (Type | "");
 
 
-
-
 export default class BasicPuzzle<Type>{
     grid: celValue<Type>[][];
 
@@ -10,7 +8,7 @@ export default class BasicPuzzle<Type>{
         this.grid = values;
     }
 
-    isWithinGrid(x: number, y: number): boolean {
+    private isWithinGrid(x: number, y: number): boolean {
         return (x < 0 || x >= this.grid[0].length || y < 0 || y >= this.grid.length)
     }
 

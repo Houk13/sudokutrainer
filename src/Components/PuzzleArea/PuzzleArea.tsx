@@ -6,13 +6,14 @@ import QuickScanSudokuPlayer from './Sudoku/QuickScanSudokuPlayer';
 import { QuickSudokuScan } from '../../puzzleLogic/Sudoku/generateQuickSudokuScan';
 import { randomInt } from 'mathjs';
 import { useState } from 'react';
+import Puzzle from '../../puzzleLogic/Classes/Puzzle';
 
 interface PuzzleAreaprops<Type extends number | "">{
   update: () => void;  
   data: any;
   puzzleType: string;
   selected: Selection;
-  puzzle?: Type[][];
+  puzzle: Puzzle<Type>;
   quickScanSudoku?: QuickSudokuScan;
   quickScanGenerater?: () => void;
   scores?: any;
@@ -33,7 +34,7 @@ function PuzzleArea<Type extends number | "">(props: PuzzleAreaprops<Type>) {
             const coordstring: string[] = coord.split(':');
             const coords: number[] = [];
             coordstring.forEach(str => coords.push(Number(str)));
-            props.puzzle![coords[0]][coords[1]] = e.key as Type;
+            props.puzzle.grid[coords[0]][coords[1]] = e.key as Type;
           }
         });
       }
@@ -41,7 +42,7 @@ function PuzzleArea<Type extends number | "">(props: PuzzleAreaprops<Type>) {
     }
     puzzle1 = <SudokuPlayer update={props.update} 
                       puzzleType='Sudoku' 
-                      puzzle={props.puzzle as Type[][]}
+                      puzzle={props.puzzle.grid as Type[][]}
                       selected={props.selected}></SudokuPlayer>
   } else if (props.puzzleType === 'quickScanSudoku' && props.quickScanSudoku !== undefined) {
     keyboardHandler = (e: React.KeyboardEvent) => {
