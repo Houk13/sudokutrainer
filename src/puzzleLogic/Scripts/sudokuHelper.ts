@@ -8,7 +8,7 @@
 
 // Where possible, use the existing helper functions.
 import * as hf from "./helperFunctions"; 
-const SUDOKUSIZE = 9;
+export const SUDOKUSIZE = 9;
 // 
 export type celValue = (number | "");
 
@@ -35,6 +35,14 @@ export const getSudokuBox= <T,>(grid: T[][], box: number): T[] => {
         }
     return boxArray;
 }
+/** returns the 0-indexed boxCoordinate of a boxnumber and celnumber from 0 to 8 */
+export const toBoxCoordinate = (boxNum: number, celNum: number): [number, number] => {
+    const row = 3 * Math.floor(boxNum / 3) + Math.floor(celNum / 3);
+    const col = 3 * (boxNum % 3) + (celNum % 3)
+    return [row, col];
+}
+
+
 /** returns an array with the values in the given row */
 export const getSudokuRow = <T,>(grid: T[][], row: number): T[] => {
     return grid[row - 1];

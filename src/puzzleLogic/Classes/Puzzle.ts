@@ -1,32 +1,43 @@
+import PuzzleGrid from "./PuzzleGrid";
 export type celValue<Type> = (Type | "");
-/** deprecated, use BasicPuzzle and PuzzleInterface if possible */
-export default class Puzzle<Type>{
-    grid: celValue<Type>[][];
-    rules?: ((grid: celValue<Type>[][]) => boolean)[];
-    solution?: Type[][];
 
-    constructor(values: celValue<Type>[][], rules?: ((grid: celValue<Type>[][]) => boolean)[], solution?: Type[][]){
-        this.grid = values;
+
+export default class Puzzle<Type>{
+    baseGrid: PuzzleGrid<Type>;
+    puzzleGrid: PuzzleGrid<Type>;
+    rules?: ((puzzle: Puzzle<Type>) => boolean)[];
+    answer?: celValue<Type>;
+    solutionGrid?: PuzzleGrid<Type>;
+
+    constructor(grid: PuzzleGrid<Type>, rules?: ((puzzle: Puzzle<Type>) => boolean)[], answer?: celValue<Type>, solution?: PuzzleGrid<Type>){
+        this.baseGrid = grid;
+        let gridCopy = JSON.parse(JSON.stringify(grid.grid)); // create a copy for editing
+        this.puzzleGrid = new PuzzleGrid(gridCopy);
         this.rules = rules;
-        this.solution = solution;
+        this.answer = answer;
+        this.solutionGrid = solution;
     }
 
     setVal(x: number, y: number, val: Type){
-        if (x < 0 || x >= this.grid[0].length || y < 0 || y >= this.grid.length) throw("outside of grid indexes");
-        this.grid[x][y] = val;
+        this.puzzleGrid.setVal(x, y, val);
+    }
+
+    getVal(x: number, y: number): celValue<Type>{
+        return this.puzzleGrid.getVal(x, y);
+    }
+
+    getPuzzleGrid(): celValue<Type>[][] {
+        return this.puzzleGrid.getGrid();
     }
 
     isSolved(): boolean {
         let solved = true;
-        this.rules?.forEach(element => {
-            // console.log(element, ": ", element(this.grid));
-            // let result = element(this.grid);
-            // if (!result) console.log(element, ": ", element(this.grid));
-            solved = solved ? element(this.grid) : solved;        
+        // Apply each rule to the grid, skip if already false;
+        this.rules?.forEach(ruleFunction => {
+            solved = solved ? ruleFunction(this) : solved;        
         });
-
-        // Add check against grid if no rules are supplied
+        
+        // Add comparison with solutionGrid if it exists
         return solved;
-
     }
 }

@@ -1,4 +1,5 @@
 import Puzzle, { celValue } from "../Classes/Puzzle";
+import PuzzleGrid from "../Classes/PuzzleGrid";
 import { isSet1to9 } from "../Scripts/sudokuHelper";
 type gridType = Array<celValue<number>[]>
 
@@ -39,13 +40,13 @@ let getBox = (grid: gridType, boxnum: number): celValue<number>[] => {
             , ...grid[firstRow + 2].slice(firstCol, firstCol + 3)];
 }
 
-let rules: ((grid: gridType) => boolean)[] = [];
+let rules: ((puzzle: Puzzle<number>) => boolean)[] = [];
 
 for (let set = 0; set !== 9; ++set) {
-    rules.push((grid: gridType) => isSet1to9(grid[set]));
-    rules.push((grid: gridType) => isSet1to9(grid.map(arr => arr[set])));
-    rules.push((grid: gridType) => isSet1to9(getBox(grid, set)))
+    rules.push((puzzle: Puzzle<number>) => isSet1to9(puzzle.puzzleGrid.grid.map(arr => arr[set])));
+    rules.push((puzzle: Puzzle<number>) => isSet1to9(puzzle.puzzleGrid.grid[set]));
+    rules.push((puzzle: Puzzle<number>) => isSet1to9(getBox(puzzle.puzzleGrid.grid, set)))
 }
 
 
-export const sudoku = new Puzzle(grid, rules);
+export const sudoku = new Puzzle(new PuzzleGrid(grid), rules);

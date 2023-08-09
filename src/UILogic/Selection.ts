@@ -46,7 +46,6 @@ export default class Selection {
             this.remove(cel);
             this.nSelected--;
         }
-        console.log(this.latest);
     }
 
     isSelected(cel: coordinate): boolean {

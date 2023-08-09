@@ -6,6 +6,7 @@ interface CellProps<Type>{
     coords: [number, number];
     clickHandler?: (e: any) => void;
     isSelected?: boolean;
+    extraClasses?: string;
 }
 
 function Cell<Type>(props: CellProps<Type>) {
@@ -15,7 +16,7 @@ function Cell<Type>(props: CellProps<Type>) {
 
     let clickhandler = props.clickHandler ?? props.clickHandler;
     const selectString = props.isSelected? "selected" : "";
-    const classString = "cell "+ "Row" + props.coords[0] + " Col" + props.coords[1] + " " + selectString;
+    const classString = "cell "+ "Row" + props.coords[0] + " Col" + props.coords[1] + " " + selectString + " " + props.extraClasses;
     return (
         <div className={classString}
             onMouseDown={clickhandler}>

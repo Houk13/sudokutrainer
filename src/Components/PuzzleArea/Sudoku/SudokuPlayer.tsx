@@ -2,18 +2,19 @@ import Cell from '../Cell';
 import '../Puzzle.css'
 import Selection from '../../../UILogic/Selection';
 import SudokuBorder from './SudokuBorder';
-import { celValue } from '../../../puzzleLogic/Classes/Puzzle';
+import Puzzle, { celValue } from '../../../puzzleLogic/Classes/Puzzle';
+import PuzzleGrid from '../../../puzzleLogic/Classes/PuzzleGrid';
 
-interface SudokuPlayerprops{
+interface SudokuPlayerprops<Type>{
   update: () => void;  
   puzzleType: string;
-  puzzle: celValue<number>[][];
+  puzzle: Puzzle<Type>;
   selected: Selection;
 }
 
-function SudokuPlayer(props: SudokuPlayerprops) {
+function SudokuPlayer<Type>(props: SudokuPlayerprops<Type>) {
 
-  function renderCell(row: number, col: number, value: celValue<number>){
+  function renderCell(row: number, col: number){
     const mouseDownHandler = (e: React.MouseEvent) => {
       if (e.ctrlKey){ 
         props.selected.flip([row, col])
@@ -29,9 +30,10 @@ function SudokuPlayer(props: SudokuPlayerprops) {
     return <Cell
             key={"Cell" + String(row) + String(col)} 
             coords={[row, col]}
-            content={value}
+            content={props.puzzle.getVal(row, col)}
             clickHandler={mouseDownHandler}
-            isSelected={props.selected.isSelected([row, col])}></Cell>
+            isSelected={props.selected.isSelected([row, col])}
+            extraClasses={props.puzzle.baseGrid.getVal(row, col) === "" ? "" : "baseValue"}/>
             
   }
   function renderBorder(row: number, col: number, bordershape: string) {
@@ -53,7 +55,7 @@ function SudokuPlayer(props: SudokuPlayerprops) {
       let rowCells: JSX.Element[] = [];
       for (let col = 0; col !== 9; ++col){
         rowCells.push(renderBorder(row, col, "verticalBorder"));
-        rowCells.push(renderCell(row, col, props.puzzle[row][col]));
+        rowCells.push(renderCell(row, col));
       }
       rowCells.push(renderBorder(row, 9, "verticalBorder"));
       sudokugrid.push(rowCells);

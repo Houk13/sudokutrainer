@@ -12,7 +12,6 @@ import { Options } from "./puzzleLogic/Classes/Options"
 import { isSetNtoM } from "./puzzleLogic/Scripts/helperFunctions";
 import * as sh from "./puzzleLogic/Scripts/sudokuHelper";
 import { sudoku } from "./puzzleLogic/Sudoku/TestSudoku";
-import generateQuickSudokuScan from "./puzzleLogic/Sudoku/generateQuickSudokuScan";
 import { celValue } from "./puzzleLogic/Scripts/sudokuHelper";
 // import { isSet1to9 } from "./puzzleLogic/Scripts/sudokuRules";
 

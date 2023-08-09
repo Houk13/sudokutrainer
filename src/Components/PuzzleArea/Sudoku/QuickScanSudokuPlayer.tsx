@@ -37,7 +37,6 @@ function QuickScanSudokuPlayer<Type>(props: quickScanPlayerprops<Type>) {
     return rowCells;
   }
   function renderSudokuGrid(){
-    let idx: number = 0;
     let sudokugrid: JSX.Element[][] = []
     for (let row = 0; row !== 9; row++){
       sudokugrid.push(renderBorderRow(row, 9));
@@ -51,7 +50,7 @@ function QuickScanSudokuPlayer<Type>(props: quickScanPlayerprops<Type>) {
       sudokugrid.push(rowCells);
     }
     sudokugrid.push(renderBorderRow(9, 9));
-    return(<div className='sudokuGridd'>{sudokugrid}</div>)
+    return(<div className='sudokuGrid'>{sudokugrid}</div>)
   }
   const areaID = "QuickScan1";
 

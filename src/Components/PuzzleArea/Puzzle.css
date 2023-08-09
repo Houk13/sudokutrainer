@@ -62,6 +62,7 @@
     /* border: 2px solid black; */
     aspect-ratio: 1;
     text-align: center;
+    caret-color: transparent;
 }
 
 .border{
@@ -98,4 +99,8 @@
 }
 .wrong{
     background-color: rgb(236, 164, 164);
+}
+
+.baseValue{
+    font-weight: 500;
 }
