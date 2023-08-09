@@ -1,25 +1,28 @@
 import Cell from '../Cell';
 import '../Puzzle.css'
-import Selection from '../../../UILogic/Selection';
 import SudokuBorder from './SudokuBorder';
-import { celValue } from '../../../puzzleLogic/Classes/Puzzle';
-import quickSudokuScanGenerator, { QuickSudokuScan } from '../../../puzzleLogic/Sudoku/generateQuickSudokuScan';
+import Puzzle, { celValue } from '../../../puzzleLogic/Classes/Puzzle';
+import { QuickSudokuScan } from '../../../puzzleLogic/Sudoku/generateQuickSudokuScan';
+import Selection from '../../../UILogic/Selection';
 
-interface quickScanPlayerprops{
+interface quickScanPlayerprops<Type>{
   update: () => void;
   puzzleType: string;
-  puzzle: QuickSudokuScan;
-  type: "row" | "col" | "box";
+  puzzle: Puzzle<Type>;
+  selected:Selection
 }
 
-function QuickScanSudokuPlayer(props: quickScanPlayerprops) {
-  function renderCell(row: number, col: number, value: celValue<number>){   
+
+// Refactor to use the Puzzle type instead of the QuickSudokuScan type of puzzle
+function QuickScanSudokuPlayer<Type>(props: quickScanPlayerprops<Type>) {
+  function renderCell(row: number, col: number){
+   
     return <Cell
             key={"Cell" + String(row) + String(col)} 
             coords={[row, col]}
-            content={value}
-            isSelected={value === ""}></Cell>
-            
+            content={props.puzzle.getVal(row, col)}
+            isSelected={props.selected.isSelected([row, col])}
+            extraClasses={props.puzzle.baseGrid.getVal(row, col) === "" ? "" : "baseValue"}/>     
   }
   function renderBorder(row: number, col: number, bordershape: string) {
     return <SudokuBorder key={bordershape + String(row) + String(col)} row={row} col={col} borderShape={bordershape}></SudokuBorder>
@@ -34,28 +37,21 @@ function QuickScanSudokuPlayer(props: quickScanPlayerprops) {
     return rowCells;
   }
   function renderSudokuGrid(){
-    let width: number;
-    let height: number;
     let idx: number = 0;
-
-    if (props.type === "row")       { width = 9; height = 1}
-    else if (props.type === "col")  { width = 1; height = 9}
-    else                            { width = 3; height = 3}
-
     let sudokugrid: JSX.Element[][] = []
-    for (let row = 0; row !== height; row++){
-      sudokugrid.push(renderBorderRow(row, width));
+    for (let row = 0; row !== 9; row++){
+      sudokugrid.push(renderBorderRow(row, 9));
       let rowCells: JSX.Element[] = [];
-      for (let col = 0; col !== width; col++){
+      for (let col = 0; col !== 9; col++){
         rowCells.push(renderBorder(row, col, "verticalBorder"));
-        rowCells.push(renderCell(row, col, props.puzzle.values[idx++]));
+        rowCells.push(renderCell(row, col));
         // rowCells.push(renderCell(row, col, idx++));
       }
-      rowCells.push(renderBorder(row, width, "verticalBorder"));
+      rowCells.push(renderBorder(row, 9, "verticalBorder"));
       sudokugrid.push(rowCells);
     }
-    sudokugrid.push(renderBorderRow(height, width));
-    return(<div className={"sudokuJust" + props.type}>{sudokugrid}</div>)
+    sudokugrid.push(renderBorderRow(9, 9));
+    return(<div className='sudokuGridd'>{sudokugrid}</div>)
   }
   const areaID = "QuickScan1";
 
