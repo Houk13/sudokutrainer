@@ -26,6 +26,7 @@
     /* height: 50vh; */
     /* aspect-ratio: 1; */
     margin: 20px;
+    caret-color: transparent;
 }
 
 
@@ -62,7 +63,6 @@
     /* border: 2px solid black; */
     aspect-ratio: 1;
     text-align: center;
-    caret-color: transparent;
 }
 
 .border{

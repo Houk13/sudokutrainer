@@ -1,10 +1,9 @@
-type InputType = "Sudoku" | "Surface";
+import { InputMode } from "../UILogic/PuzzleInputHandler"
 
 interface InputSettings{
-    type: InputType
+    type: InputMode
 }
 
-export const inputSettings: InputSettings = {
-    type: "Sudoku", 
-        
+export const inputSettings: InputSettings  = {
+    type: "Sudoku"
 }

@@ -10,21 +10,14 @@ interface SudokuPlayerprops<Type>{
   puzzleType: string;
   puzzle: Puzzle<Type>;
   selected: Selection;
+  mouseHandler: (e: React.MouseEvent, row: number, col: number) => void;
 }
 
 function SudokuPlayer<Type>(props: SudokuPlayerprops<Type>) {
 
   function renderCell(row: number, col: number){
     const mouseDownHandler = (e: React.MouseEvent) => {
-      if (e.ctrlKey){ 
-        props.selected.flip([row, col])
-      }
-      else {
-        let wasOn = props.selected.isSelected([row, col]) && props.selected.nSelected < 2;
-        props.selected.clear();
-        if (!wasOn) props.selected.flip([row, col]);
-      }
-      props.update();
+      props.mouseHandler(e, row, col);
     }
     
     return <Cell

@@ -1,4 +1,5 @@
 type coordinate = [number, number];
+export type keyDirection = "ArrowUp" | "ArrowLeft" | "ArrowDown" | "ArrowRight";
 
 export default class Selection {
     items: Map<string, coordinate>
@@ -52,41 +53,47 @@ export default class Selection {
         return (this.items.get(this.toString(cel)) !== undefined) ? true : false;
     }
 
+    select(cel: coordinate): void {
+        let wasOn = this.isSelected(cel) && this.nSelected === 1;
+        this.clear();
+        if (!wasOn) this.flip(cel);
+    }
+
     actOnSelected(fun: (cel: coordinate) => any) {
         this.items.forEach(val => fun(val));
     }
 }
 
-// export default class Selection {
-//     items: coordinate[]
+export function defaultMouseHandler(e: React.MouseEvent, selection: Selection, row: number, col: number): void{
+    if (e.ctrlKey){ 
+      selection.flip([row, col])
+    }
+    else {
+      selection.select([row, col])
+    }
+}
 
-//     constructor(cel?: coordinate){
-//         if (cel) {
-//             this.items = [cel];
-//         } else {
-//             this.items = [];
-//         }
-//     }
-
-//     clear(): void {
-//         this.items = [];
-//     }
-
-//     private add(cel: coordinate): void {
-//         this.items.push(cel);
-//     }
-
-//     remove(celIdx: number): void {
-//         this.items.splice(celIdx, 1);
-//     }
-
-//     flip(cel: coordinate): void {
-//         const idx = this.items.findIndex(val => val[0] === cel[0] && val[1] === cel[1]);
-//         if (idx === -1){
-//             this.add(cel);
-//         } else {
-//             this.remove(idx);
-//         }
-//     }
-
-// }
+export function defaultSelectionKeyHandler(key: keyDirection, selection: Selection) {
+    let prev: coordinate = selection.latest?? [0, 0];
+    selection.softClear();
+    switch (key) {
+        case "ArrowUp":
+            let rowUp = prev[0] - 1;
+            selection.select([rowUp, prev[1]]);
+            break;
+        case "ArrowDown":
+            let rowDown = prev[0] + 1;
+            selection.select([rowDown, prev[1]]);
+            break;
+        case "ArrowLeft":
+            let colLeft = prev[1] - 1;
+            selection.select([prev[0], colLeft]);
+            break;
+        case "ArrowRight":
+            let colRight = prev[1] + 1;
+            selection.select([prev[0], colRight]);
+            break;
+        default:
+            break;
+    }
+}
