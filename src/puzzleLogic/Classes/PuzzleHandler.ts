@@ -37,7 +37,6 @@ export class SudokuHandler<Type> implements PuzzleHandler<Type> {
 
 export function defaultKeyboardHandler<Type>(e: React.KeyboardEvent, handler: PuzzleHandler<Type>, selection: Selection){
     let inputType: InputType = getKeyboardInputType(e);
-    console.log(inputType);
     if (inputType === "input") handler.inputHandler("keyboard", e.key);
     else if (inputType === "movement") defaultSelectionKeyHandler(e.key as keyDirection, selection);
     else if (inputType === "utility") console.log("utility key: ", e.key);

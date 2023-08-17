@@ -1,13 +1,13 @@
 import './Puzzle.css'
-import Selection, { defaultSelectionKeyHandler, defaultMouseHandler, keyDirection } from '../../UILogic/Selection';
+import Selection, { defaultMouseHandler} from '../../UILogic/Selection';
 import SudokuPlayer from './Sudoku/SudokuPlayer';
-import { isAlphaNumeric, isNumeric } from './inputHandlers';
+import { isNumeric } from './inputHandlers';
 import QuickScanSudokuPlayer from './Sudoku/QuickScanSudokuPlayer';
 import { randomInt } from 'mathjs';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Puzzle from '../../puzzleLogic/Classes/Puzzle';
 import { SudokuHandler, defaultKeyboardHandler } from '../../puzzleLogic/Classes/PuzzleHandler';
-import { InputType, getKeyboardInputType } from '../../UILogic/PuzzleInputHandler';
+
 
 interface PuzzleAreaprops<Type extends number | "">{
   update: () => void;  
@@ -15,7 +15,7 @@ interface PuzzleAreaprops<Type extends number | "">{
   puzzleType: string;
   selected: Selection;
   puzzle: Puzzle<Type>;
-  puzzleGenerator?: () => void;
+  puzzleGenerator: () => void;
   scores?: any;
   settings?: any;
   userInfo?: any;
@@ -28,7 +28,7 @@ function PuzzleArea<Type extends number | "">(props: PuzzleAreaprops<Type>) {
   let keyboardHandler = (e: React.KeyboardEvent) => console.log("no keyboard eventHanlder available for: ", e.key);
   let mouseHandler = (e: React.MouseEvent, row: number, col: number) => console.log("no mouseHandler is active")
   let [quickResult, setQuickResult] = useState("none");
-  if (props.puzzleType === 'sudoku' && props.puzzle !== undefined) {
+  if (props.puzzleType === 'SudokuClassic' && props.puzzle !== undefined) {
     const handler = new SudokuHandler(props.puzzle, props.selected)
     keyboardHandler = (e: React.KeyboardEvent) => {
       defaultKeyboardHandler<Type>(e, handler, props.selected);
@@ -45,10 +45,9 @@ function PuzzleArea<Type extends number | "">(props: PuzzleAreaprops<Type>) {
                       mouseHandler={mouseHandler}></SudokuPlayer>
   } 
   // -----------------QUICKSCAN --------------- NEEDS UPDATE TO USE THE PUZZLE CLASS
-  else if (props.puzzleType === 'quickScanSudoku') {
+  else if (props.puzzleType === 'SudokuQuickScan') {
     keyboardHandler = (e: React.KeyboardEvent) => {
       // if input is alphanumeric, treat is as puzzleEntry
-      console.log(e);
       if (isNumeric(e.key)){
         const result = Number(e.key) === props.puzzle.answer;
         if (result) {
@@ -56,6 +55,7 @@ function PuzzleArea<Type extends number | "">(props: PuzzleAreaprops<Type>) {
         } else {
           setQuickResult("wrong");
         }
+        console.log(quickResult);
         props.puzzleGenerator!();
       }
       props.update();
@@ -72,25 +72,25 @@ function PuzzleArea<Type extends number | "">(props: PuzzleAreaprops<Type>) {
                       ></QuickScanSudokuPlayer>
   }
   // -----------------INPUT TESTING --------------- 
-  else if (props.puzzleType === 'inputTestSudoku') {
-    const handler = new SudokuHandler(props.puzzle, props.selected)
-    keyboardHandler = (e: React.KeyboardEvent) => {
-      let inputType: InputType = getKeyboardInputType(e);
-      console.log(inputType);
-      if (inputType === "input") handler.inputHandler("keyboard", e.key);
-      else if (inputType === "movement") defaultSelectionKeyHandler(e.key as keyDirection, props.selected);
-      else if (inputType === "utility") console.log("utility key: ", e.key);
-      else console.log("other key: ", e.key)
-      props.update();
-    }
-    let type = props.data.type;
-    if (type === "any") type = ["row", "col", "box"][randomInt(0, 3)] as "row"| "col" | "box"
-    puzzle1 = <QuickScanSudokuPlayer update={props.update}
-                      puzzleType='quickScanSudoku'
-                      puzzle={props.puzzle}
-                      selected={props.selected}
-                      ></QuickScanSudokuPlayer>
-  }
+  // else if (props.puzzleType === 'inputTestSudoku') {
+  //   const handler = new SudokuHandler(props.puzzle, props.selected)
+  //   keyboardHandler = (e: React.KeyboardEvent) => {
+  //     let inputType: InputType = getKeyboardInputType(e);
+  //     console.log(inputType);
+  //     if (inputType === "input") handler.inputHandler("keyboard", e.key);
+  //     else if (inputType === "movement") defaultSelectionKeyHandler(e.key as keyDirection, props.selected);
+  //     else if (inputType === "utility") console.log("utility key: ", e.key);
+  //     else console.log("other key: ", e.key)
+  //     props.update();
+  //   }
+  //   let type = props.data.type;
+  //   if (type === "any") type = ["row", "col", "box"][randomInt(0, 3)] as "row"| "col" | "box"
+  //   puzzle1 = <QuickScanSudokuPlayer update={props.update}
+  //                     puzzleType='quickScanSudoku'
+  //                     puzzle={props.puzzle}
+  //                     selected={props.selected}
+  //                     ></QuickScanSudokuPlayer>
+  // }
   const areaID = "PuzzleArea1";
 
   return (

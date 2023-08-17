@@ -1,8 +1,7 @@
 import Cell from '../Cell';
 import '../Puzzle.css'
 import SudokuBorder from './SudokuBorder';
-import Puzzle, { celValue } from '../../../puzzleLogic/Classes/Puzzle';
-import { QuickSudokuScan } from '../../../puzzleLogic/Sudoku/generateQuickSudokuScan';
+import Puzzle from '../../../puzzleLogic/Classes/Puzzle';
 import Selection from '../../../UILogic/Selection';
 
 interface quickScanPlayerprops<Type>{
